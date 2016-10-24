@@ -2,7 +2,6 @@
   "name": "legomolina/simple-orm",
   "type": "library",
   "description": "SimpleORM is a little ORM based on PHP",
-  "minimum-stability": "stable",
   "license": "MIT",
   "authors": [
     {
