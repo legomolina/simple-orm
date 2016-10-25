@@ -84,12 +84,20 @@ interface ResultSetInterface
     function goToRegister($register);
 
     /**
+     * Get the field with the name given for the current register
+     * @param string $field The field you want to retrieve
+     * @return ResultSet
+     * @throws \OutOfRangeException If field provided does not exists
+     */
+    function get($field);
+
+    /**
      * Gets the fielfs given for the current register of the ResultSet.
      * @param array ...$fieldName The name of the fields you want to get
      * @return array The array containing the fields you selected
      * @throws \OutOfRangeException If the field does not exist
      */
-    function getFields(...$fieldName);
+    /*function getFields(...$fieldName);*/
 
     /**
      * Gets all fields of the current register of the ResultSet.

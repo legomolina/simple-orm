@@ -62,12 +62,20 @@ class ResultSet implements ResultSetInterface
         return $this;
     }
 
+    public function get($field)
+    {
+        if(!array_key_exists($field, $this->resultSet[0]))
+            throw new InvalidORMArgument('Field ' . $field . ' does not exist in result');
+
+        return $this->resultSet[key($this->resultSet)][$field];
+    }
+
     public function getAll()
     {
         return current($this->resultSet);
     }
 
-    public function getFields(...$fieldName)
+    /*public function getFields(...$fieldName)
     {
         $colRegisters = array();
 
@@ -89,7 +97,7 @@ class ResultSet implements ResultSetInterface
         }
 
         return $colRegisters;
-    }
+    }*/
 
     public function goToRegister($register)
     {
