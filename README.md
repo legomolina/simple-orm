@@ -36,10 +36,15 @@ Create your first model:
     }
 ```
 
-Create your MySQLi connection in your index so it can be accessible with global
+Call config method from Model to pass mysqli connection params
 ```php
 <?php
-    $connection = new \mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    \SimpleORM\Model::config(array(
+        'name' => 'my_database_name',
+        'user' => 'my_user',
+        'pass' => '*******',
+        'host' => 'my_host'
+    ));
 ```
 
 And you are ready to use SimpleORM!

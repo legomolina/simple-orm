@@ -2,6 +2,8 @@
 
 namespace SimpleORM;
 
+use SimpleORM\Exceptions\InvalidORMArgument;
+
 require 'SqlFunctionsImpl.php';
 
 class Model extends SqlFunctions
@@ -11,10 +13,26 @@ class Model extends SqlFunctions
     private static $connection = null;
     private static $functions = null;
 
+    private static $DB_USER;
+    private static $DB_NAME;
+    private static $DB_PASS;
+    private static $DB_HOST;
+
+    public static function config($config)
+    {
+        if(!array_key_exists('host', $config) || !array_key_exists('name', $config) || !array_key_exists('pass', $config) || !array_key_exists('user', $config))
+            throw new InvalidORMArgument("It's necessary insert required fields");
+
+        self::$DB_HOST = $config['host'];
+        self::$DB_NAME = $config['name'];
+        self::$DB_PASS = $config['pass'];
+        self::$DB_USER = $config['user'];
+    }
+
     public static function getConnection()
     {
         if(self::$connection == null) {
-            global $connection;
+            $connection = new \mysqli(self::$DB_HOST, self::$DB_USER, self::$DB_PASS, self::$DB_NAME);
             self::$connection = $connection;
         }
     }
