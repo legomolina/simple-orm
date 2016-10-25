@@ -29,7 +29,7 @@ class Model extends SqlFunctions
         self::$DB_USER = $config['user'];
     }
 
-    public static function getConnection()
+    private static function getConnection()
     {
         if(self::$connection == null) {
             $connection = new \mysqli(self::$DB_HOST, self::$DB_USER, self::$DB_PASS, self::$DB_NAME);
