@@ -5,6 +5,8 @@ namespace SimpleORM;
 use SimpleORM\Exceptions\InvalidORMArgument;
 use SimpleORM\Interfaces\ResultSetInterface;
 
+require 'Interfaces/ResultSet.php';
+
 class ResultSet implements ResultSetInterface
 {
     private $resultSet;

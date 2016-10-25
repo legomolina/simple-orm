@@ -2,6 +2,8 @@
 
 namespace SimpleORM;
 
+require 'ResultSetImpl.php';
+
 class Model extends SqlFunctions
 {
     protected static $table;
