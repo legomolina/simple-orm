@@ -19,7 +19,7 @@ Require the Composer autoload in your index:
 Create your first model:
 
 ```php
-    <?php
+<?php
     
     use \SimpleORM\Model;
     
@@ -41,12 +41,12 @@ And you are ready to use SimpleORM!
 ```php
     $result = MyModel::query()->select('column')->order('column')->execute();
     
-   for($i = 0; $i < $result->count(); $i ++) {
+    for($i = 0; $i < $result->count(); $i ++) {
         echo $result->get('column');
         
         if(!$result->isLast())
             $result->next();
-   }
+    }
 ```
 
 ### License
