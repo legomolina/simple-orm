@@ -1,6 +1,6 @@
 <?php
 
-namespace legomolina\SimpleORM;
+namespace SimpleORM;
 
 require_once('SqlFunctionsImpl.php');
 

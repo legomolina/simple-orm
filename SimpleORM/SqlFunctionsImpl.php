@@ -1,8 +1,7 @@
 <?php
 
-namespace legomolina\SimpleORM;
+namespace SimpleORM;
 
-use ORM\SqlFunctionsInterface;
 use SimpleORM\Exception as Exc;
 
 require_once('Exceptions/ORMException.php');

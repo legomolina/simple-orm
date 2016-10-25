@@ -1,6 +1,6 @@
 <?php
 
-namespace legomolina\SimpleORM;
+namespace SimpleORM;
 
 interface ResultSetInterface
 {

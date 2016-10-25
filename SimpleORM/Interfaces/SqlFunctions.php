@@ -1,9 +1,9 @@
 <?php
 
-namespace legomolina\SimpleORM;
+namespace SimpleORM;
 
-use ORM\Exception\InvalidORMArgument;
-use ORM\Exception\InvalidORMMethod;
+use SimpleORM\Exception\InvalidORMArgument;
+use SimpleORM\Exception\InvalidORMMethod;
 
 interface SqlFunctionsInterface
 {

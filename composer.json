@@ -22,5 +22,10 @@
       "type": "vcs",
       "url": "https://github.com/legomolina/simple-orm.git"
     }
-  ]
+  ],
+  "autoload": {
+    "psr-4": {
+      "SimpleORM\\": "SimpleORM/"
+    }
+  }
 }

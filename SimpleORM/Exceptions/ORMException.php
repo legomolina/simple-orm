@@ -1,6 +1,6 @@
 <?php
 
-namespace legomolina\SimpleORM\Exception;
+namespace SimpleORM\Exception;
 
 
 class InvalidORMArgument extends \Exception
