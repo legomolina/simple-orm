@@ -2,7 +2,7 @@
 
 namespace SimpleORM;
 
-require 'ResultSetImpl.php';
+require 'SqlFunctionsImpl.php';
 
 class Model extends SqlFunctions
 {
