@@ -36,6 +36,12 @@ Create your first model:
     }
 ```
 
+Create your MySQLi connection in your index so it can be accessible with global
+```php
+<?php
+    $connection = new \mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+```
+
 And you are ready to use SimpleORM!
 
 ```php
