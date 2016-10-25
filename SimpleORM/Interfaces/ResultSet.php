@@ -46,7 +46,6 @@ interface ResultSetInterface
     function first();
 
     /**
-     * asdasd
      * Sets the internal pointer of the ResultSet in the last element.
      * @return ResultSet
      */
