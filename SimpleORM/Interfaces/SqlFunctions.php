@@ -1,9 +1,6 @@
 <?php
 
-namespace SimpleORM;
-
-use SimpleORM\Exception\InvalidORMArgument;
-use SimpleORM\Exception\InvalidORMMethod;
+namespace SimpleORM\Interfaces;
 
 interface SqlFunctionsInterface
 {

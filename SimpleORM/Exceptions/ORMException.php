@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleORM\Exception;
+namespace SimpleORM\Exceptions;
 
 
 class InvalidORMArgument extends \Exception

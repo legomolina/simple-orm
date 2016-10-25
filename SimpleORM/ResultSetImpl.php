@@ -2,9 +2,8 @@
 
 namespace SimpleORM;
 
-use SimpleORM\Exception\InvalidORMArgument;
-
-require_once('Interfaces/ResultSet.php');
+use SimpleORM\Exceptions\InvalidORMArgument;
+use SimpleORM\Interfaces\ResultSetInterface;
 
 class ResultSet implements ResultSetInterface
 {

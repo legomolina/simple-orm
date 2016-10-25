@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleORM;
+namespace SimpleORM\Interfaces;
 
 interface ResultSetInterface
 {

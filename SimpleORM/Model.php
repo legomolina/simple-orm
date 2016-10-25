@@ -2,8 +2,6 @@
 
 namespace SimpleORM;
 
-require_once('SqlFunctionsImpl.php');
-
 class Model extends SqlFunctions
 {
     protected static $table;
