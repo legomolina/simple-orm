@@ -17,9 +17,10 @@
   "require": {
     "php": ">=7.0"
   },
-  "autoload": {
-    "psr-4": {
-      "SimpleORM\\": "Model"
+  "repositories" : [
+    {
+      "type": "vcs",
+      "url": "https://github.com/legomolina/simple-orm.git"
     }
-  }
+  ]
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace SimpleORM;
+namespace legomolina\SimpleORM;
 
-require_once ('SqlFunctionsImpl.php');
+require_once('SqlFunctionsImpl.php');
 
 class Model extends SqlFunctions
 {

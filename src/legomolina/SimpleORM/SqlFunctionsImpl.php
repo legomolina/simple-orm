@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleORM;
+namespace legomolina\SimpleORM;
 
 use ORM\SqlFunctionsInterface;
 use SimpleORM\Exception as Exc;

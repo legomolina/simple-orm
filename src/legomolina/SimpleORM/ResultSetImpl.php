@@ -1,6 +1,8 @@
 <?php
 
-namespace SimpleORM;
+namespace legomolina\SimpleORM;
+
+use legomolina\SimpleORM\Exception\InvalidORMArgument;
 
 require_once('Interfaces/ResultSet.php');
 

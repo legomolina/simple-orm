@@ -1,6 +1,6 @@
 <?php
 
-namespace ORM;
+namespace legomolina\SimpleORM;
 
 use ORM\Exception\InvalidORMArgument;
 use ORM\Exception\InvalidORMMethod;
