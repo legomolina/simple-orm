@@ -16,8 +16,6 @@ class ResultSet implements ResultSetInterface
         while ($row = $queryResult->fetch_assoc()) {
             $this->resultSet[] = $row;
         }
-
-        reset($this->resultSet);
     }
 
     public function count()
