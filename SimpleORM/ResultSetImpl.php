@@ -17,16 +17,15 @@ class ResultSet implements ResultSetInterface
             $this->resultSet[] = $row;
         }
 
-        if($this->resultSet = null)
-            return false;
-
         reset($this->resultSet);
-        return true;
     }
 
     public function count()
     {
-        return count($this->resultSet);
+        if($this->resultSet == null)
+            return count($this->resultSet);
+
+        return false;
     }
 
     public function fieldExists($field)
