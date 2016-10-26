@@ -17,7 +17,11 @@ class ResultSet implements ResultSetInterface
             $this->resultSet[] = $row;
         }
 
+        if($this->resultSet = null)
+            return false;
+
         reset($this->resultSet);
+        return true;
     }
 
     public function count()

@@ -138,7 +138,7 @@ class SqlFunctions implements SqlFunctionsInterface
             throw new Exc\InvalidORMArgument('Operator must be one of SQL allowed');
 
         if(gettype($value) == 'string') {
-            $value = "'$value'";
+            $value = "$value";
             $this->bindParams['types'] .= 's';
         } elseif (gettype($value) == 'double') {
             $this->bindParams['types'] .= 'd';
