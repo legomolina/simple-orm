@@ -68,8 +68,10 @@ class ResultSet implements ResultSetInterface
 
     public function hasMore()
     {
-        if(next($this->resultSet))
+        if(next($this->resultSet)) {
+            prev($this->resultSet);
             return true;
+        }
 
         return false;
     }
