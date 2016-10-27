@@ -170,7 +170,7 @@ class ResultSet implements ResultSetInterface
         }
 
         if (!next($this->resultSet))
-            throw new \OutOfRangeException('There are not more registers to show');
+            return false;
 
         return $this;
     }
@@ -181,7 +181,7 @@ class ResultSet implements ResultSetInterface
             throw new NoCursorInitializedORMException('You must call first(), last() or next() method before');
 
         if (!prev($this->resultSet))
-            throw new \OutOfRangeException('There are not more registers to show');
+            return false;
 
         return $this;
     }
