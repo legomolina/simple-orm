@@ -3,6 +3,7 @@
 namespace SimpleORM;
 
 use SimpleORM\Exceptions\InvalidORMArgument;
+use SimpleORM\Exceptions\NoCursorInitializedORMException;
 use SimpleORM\Interfaces\ResultSetInterface;
 
 require 'Interfaces/ResultSet.php';
@@ -10,12 +11,15 @@ require 'Interfaces/ResultSet.php';
 class ResultSet implements ResultSetInterface
 {
     private $resultSet;
+    private $firstCall;
 
     public function __construct(\mysqli_result $queryResult)
     {
         while ($row = $queryResult->fetch_assoc()) {
             $this->resultSet[] = $row;
         }
+
+        $this->firstCall = true;
     }
 
     public function count()
@@ -61,23 +65,19 @@ class ResultSet implements ResultSetInterface
 
     public function first()
     {
+        if($this->firstCall)
+            $this->firstCall = false;
+
         reset($this->resultSet);
 
         return $this;
     }
 
-    public function hasMore()
-    {
-        if(next($this->resultSet)) {
-            prev($this->resultSet);
-            return true;
-        }
-
-        return false;
-    }
-
     public function get($field)
     {
+        if($this->firstCall)
+            throw new NoCursorInitializedORMException('You must call first(), last() or next() method before getting some info');
+
         if(!array_key_exists($field, $this->resultSet[0]))
             throw new InvalidORMArgument('Field ' . $field . ' does not exist in result');
 
@@ -128,6 +128,9 @@ class ResultSet implements ResultSetInterface
 
     public function isFirst()
     {
+        if($this->firstCall)
+            throw new NoCursorInitializedORMException('You must call first(), last() or next() method before');
+
         if (!prev($this->resultSet))
             return true;
 
@@ -138,6 +141,9 @@ class ResultSet implements ResultSetInterface
 
     public function isLast()
     {
+        if($this->firstCall)
+            throw new NoCursorInitializedORMException('You must call first(), last() or next() method before');
+
         if (!next($this->resultSet))
             return true;
 
@@ -148,6 +154,9 @@ class ResultSet implements ResultSetInterface
 
     public function last()
     {
+        if($this->firstCall)
+            $this->firstCall = false;
+
         end($this->resultSet);
 
         return $this;
@@ -155,6 +164,11 @@ class ResultSet implements ResultSetInterface
 
     public function next()
     {
+        if($this->firstCall) {
+            $this->firstCall = false;
+            return $this;
+        }
+
         if (!next($this->resultSet))
             throw new \OutOfRangeException('There are not more registers to show');
 
@@ -163,6 +177,9 @@ class ResultSet implements ResultSetInterface
 
     public function prev()
     {
+        if($this->firstCall)
+            throw new NoCursorInitializedORMException('You must call first(), last() or next() method before');
+
         if (!prev($this->resultSet))
             throw new \OutOfRangeException('There are not more registers to show');
 
