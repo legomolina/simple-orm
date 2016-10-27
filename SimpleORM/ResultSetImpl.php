@@ -66,6 +66,14 @@ class ResultSet implements ResultSetInterface
         return $this;
     }
 
+    public function hasMore()
+    {
+        if(next($this->resultSet))
+            return true;
+
+        return false;
+    }
+
     public function get($field)
     {
         if(!array_key_exists($field, $this->resultSet[0]))

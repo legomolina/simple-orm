@@ -46,6 +46,12 @@ interface ResultSetInterface
     function first();
 
     /**
+     * Checks if there are more registers to show.
+     * @return bool True if there are more registers, false otherwise
+     */
+    function hasMore();
+
+    /**
      * Sets the internal pointer of the ResultSet in the last element.
      * @return ResultSet
      */
