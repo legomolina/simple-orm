@@ -21,9 +21,9 @@ class ResultSet implements ResultSetInterface
     public function count()
     {
         if($this->resultSet == null)
-            return count($this->resultSet);
-
-        return false;
+            return false;
+        
+        return count($this->resultSet);
     }
 
     public function fieldExists($field)
