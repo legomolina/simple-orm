@@ -8,8 +8,8 @@ require 'SqlFunctionsImpl.php';
 
 abstract class Model extends SqlFunctions
 {
-    private static $connection = null;
-    private static $functions = null;
+    protected static $connection = null;
+    protected static $functions = null;
 
     private static $DB_USER;
     private static $DB_NAME;
