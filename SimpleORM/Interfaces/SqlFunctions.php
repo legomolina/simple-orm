@@ -6,10 +6,9 @@ interface SqlFunctionsInterface
 {
     /**
      * SqlFunctionsInterface constructor. Gets the table and the mysql connection.
-     * @param string $table The table using in the queries
      * @param \mysqli $connection The connection using in the queries
      */
-    function __construct($table, \mysqli $connection);
+    function __construct(\mysqli $connection);
 
     /**
      * Constructs a SELECT query with the fields given.

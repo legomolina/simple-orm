@@ -6,10 +6,8 @@ use SimpleORM\Exceptions\InvalidORMArgument;
 
 require 'SqlFunctionsImpl.php';
 
-class Model extends SqlFunctions
+abstract class Model extends SqlFunctions
 {
-    protected static $table;
-    protected static $idCol = 'id';
     private static $connection = null;
     private static $functions = null;
 
@@ -29,6 +27,12 @@ class Model extends SqlFunctions
         self::$DB_USER = $config['user'];
     }
 
+    abstract protected static function getTableName();
+    protected static function getTableId()
+    {
+        return 'id';
+    }
+
     private static function getConnection()
     {
         if(self::$connection == null) {
@@ -41,7 +45,9 @@ class Model extends SqlFunctions
     {
         self::getConnection();
         if(self::$functions == null)
-            self::$functions = new SqlFunctions(static::$table, self::$connection);
+            self::$functions = new SqlFunctions(self::$connection);
+
+        self::$functions->setTableName(static::getTableName());
 
         return self::$functions;
     }
@@ -50,7 +56,9 @@ class Model extends SqlFunctions
     {
         self::getConnection();
         if(self::$functions == null)
-            self::$functions = new SqlFunctions(static::$table, self::$connection);
+            self::$functions = new SqlFunctions(self::$connection);
+
+        self::$functions->setTableName(static::getTableName());
 
         self::$functions->select('*');
 
@@ -61,10 +69,12 @@ class Model extends SqlFunctions
     {
         self::getConnection();
         if(self::$functions == null)
-            self::$functions = new SqlFunctions(static::$table, self::$connection);
+            self::$functions = new SqlFunctions(self::$connection);
+
+        self::$functions->setTableName(static::getTableName());
 
         $result = self::all()->execute();
 
-        return $result->find(static::$idCol, $value);
+        return $result->find(self::getTableId(), $value);
     }
 }

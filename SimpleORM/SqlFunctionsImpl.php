@@ -29,11 +29,15 @@ class SqlFunctions implements SqlFunctionsInterface
     const STMT_DELETE = 'delete';
     const STMT_NULL = null;
 
-    public function __construct($table, \mysqli $connection)
+    public function __construct(\mysqli $connection)
     {
-        $this->table = $table;
         $this->connection = $connection;
         return $this;
+    }
+
+    protected function setTableName($table)
+    {
+        $this->table = $table;
     }
 
     public function select(...$fields)
