@@ -5,6 +5,7 @@ namespace SimpleORM;
 use SimpleORM\Exceptions as Exc;
 use SimpleORM\Interfaces\SqlFunctionsInterface;
 
+require 'Exceptions/ORMException';
 require 'Interfaces/SqlFunctions.php';
 require 'ResultSetImpl.php';
 
