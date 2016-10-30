@@ -33,7 +33,7 @@ abstract class Model extends SqlFunctions
         return 'id';
     }
 
-    private static function getConnection()
+    protected static function getConnection()
     {
         if(self::$connection == null) {
             $connection = new \mysqli(self::$DB_HOST, self::$DB_USER, self::$DB_PASS, self::$DB_NAME);
