@@ -15,6 +15,7 @@ abstract class Model extends SqlFunctions
     private static $DB_NAME;
     private static $DB_PASS;
     private static $DB_HOST;
+    private static $DB_CHARSET;
 
     public static function config($config)
     {
@@ -25,6 +26,7 @@ abstract class Model extends SqlFunctions
         self::$DB_NAME = $config['name'];
         self::$DB_PASS = $config['pass'];
         self::$DB_USER = $config['user'];
+        self::$DB_CHARSET = ($config['charset'] != "") ? $config['charset'] : 'utf8';
     }
 
     abstract protected static function getTableName();
@@ -38,6 +40,8 @@ abstract class Model extends SqlFunctions
         if(self::$connection == null) {
             $connection = new \mysqli(self::$DB_HOST, self::$DB_USER, self::$DB_PASS, self::$DB_NAME);
             self::$connection = $connection;
+
+            self::$connection->set_charset(self::$DB_CHARSET);
         }
     }
 
@@ -75,6 +79,19 @@ abstract class Model extends SqlFunctions
 
         $result = self::all()->execute();
 
-        return $result->find(self::getTableId(), $value);
+        return $result->find(static::getTableId(), $value);
+    }
+
+    public static function getLastValue($field)
+    {
+        self::getConnection();
+        if(self::$functions == null)
+            self::$functions = new SqlFunctions(self::$connection);
+
+        self::$functions->setTableName(static::getTableName());
+
+        $result = self::query()->select($field)->order($field, 'DESC')->get(1)->execute();
+
+        return $result->first()->get($field);
     }
 }

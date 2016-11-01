@@ -26,7 +26,7 @@ class ResultSet implements ResultSetInterface
     {
         if($this->resultSet == null)
             return false;
-        
+
         return count($this->resultSet);
     }
 
@@ -43,7 +43,7 @@ class ResultSet implements ResultSetInterface
     public function find($field, $value)
     {
         if (!array_key_exists($field, $this->resultSet[0]))
-            throw new \OutOfRangeException('Field ' . $field . 'does not exists in table.');
+            return false;
 
         for ($i = 0; $i < count($this->resultSet); $i++) {
             if ($this->resultSet[$i][$field] == $value)

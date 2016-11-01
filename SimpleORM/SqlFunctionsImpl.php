@@ -188,7 +188,7 @@ class SqlFunctions implements SqlFunctionsInterface
             }
 
             $this->statement = rtrim($this->statement, ',');
-            
+
         } elseif (gettype($field) == 'string') {
             if (strtoupper($order) !== self::ORDER_DESC && strtoupper($order) !== self::ORDER_ASC) {
                 throw new Exc\InvalidORMArgument('Order must be ASC or DESC, not: ' . $order);
