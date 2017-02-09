@@ -52,12 +52,14 @@ class ResultSet implements ResultSetInterface
 
         return false;
     }
-
+    
     public function findValue($value)
     {
-        for ($i = 0; $i < count($this->resultSet); $i++) {
-            if (array_search($value, $this->resultSet[$i]))
-                return $this->resultSet[$i];
+        if ($this->count()) {
+            for ($i = 0; $i < count($this->resultSet); $i++) {
+                if (array_search($value, $this->resultSet[$i]))
+                    return $this->resultSet[$i];
+            }
         }
 
         return false;
