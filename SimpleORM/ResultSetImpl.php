@@ -57,7 +57,7 @@ class ResultSet implements ResultSetInterface
     {
         if ($this->count()) {
             for ($i = 0; $i < count($this->resultSet); $i++) {
-                if (array_search($value, $this->resultSet[$i]))
+                if (array_search($value, $this->resultSet[$i], true))
                     return $this->resultSet[$i];
             }
         }
