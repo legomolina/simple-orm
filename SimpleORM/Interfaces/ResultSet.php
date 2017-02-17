@@ -20,6 +20,7 @@ interface ResultSetInterface
      * Checks if the field exists in the table.
      * @param string $field The name of the field to check
      * @return bool True if exists, false otherwise
+     * @throws \NoRegistersORMException If the resultset is empty
      */
     function fieldExists($field);
 
@@ -29,6 +30,7 @@ interface ResultSetInterface
      * @param mixed $value The value you are looking for
      * @return mixed An array containing the row of the result, false otherwise
      * @throws \OutOfRangeException If the field does not exist
+     * @throws \NoRegistersORMException If the resultset is empty
      */
     function find($field, $value);
 
@@ -36,8 +38,16 @@ interface ResultSetInterface
      * Searches in the ResultSet for the value given.
      * @param mixed $value The value you are looking for
      * @return mixed An array containing the row of the result, false otherwise
+     * @throws \NoRegistersORMException If the resultset is empty
+     * @throws \NoRegistersORMException If the resultset is empty
      */
     function findValue($value);
+
+    /**
+     * Custom method for while-looping through all registers.
+     * @return mixed ResultSet instance, false if there's no more registers.
+     */
+    function loop();
 
     /**
      * Sets the internal pointer of the ResultSet in the first element.
@@ -84,31 +94,8 @@ interface ResultSetInterface
     function goToRegister($register);
 
     /**
-     * Get the field with the name given for the current register
-     * @param string $field The field you want to retrieve
-     * @return ResultSet
-     * @throws \OutOfRangeException If field provided does not exists
-     */
-    function get($field);
-
-    /**
-     * Gets the fielfs given for the current register of the ResultSet.
-     * @param array ...$fieldName The name of the fields you want to get
-     * @return array The array containing the fields you selected
-     * @throws \OutOfRangeException If the field does not exist
-     */
-    /*function getFields(...$fieldName);*/
-
-    /**
      * Gets all fields of the current register of the ResultSet.
      * @return array The array containing the row
      */
     function getAll();
-
-    /**
-     * Checks if the value exists in the ResultSet.
-     * @param mixed $value The value you are looking for
-     * @return bool True if exists, false otherwise
-     */
-    function valueExists($value);
 }

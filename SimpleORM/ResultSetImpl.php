@@ -2,8 +2,6 @@
 
 namespace SimpleORM;
 
-use SimpleORM\Exceptions\InvalidORMArgument;
-use SimpleORM\Exceptions\NoCursorInitializedORMException;
 use SimpleORM\Interfaces\ResultSetInterface;
 
 require 'Interfaces/ResultSet.php';
@@ -15,50 +13,87 @@ class ResultSet implements ResultSetInterface
 
     public function __construct(\mysqli_result $queryResult)
     {
-        while ($row = $queryResult->fetch_assoc()) {
+        while ($row = $queryResult->fetch_object()) {
             $this->resultSet[] = $row;
         }
+
+        if ($this->count())
+            $this->fillFieldVariables($this->resultSet[0]);
 
         $this->firstCall = true;
     }
 
     public function count()
     {
-        if($this->resultSet == null)
+        if ($this->resultSet == null)
             return false;
 
         return count($this->resultSet);
     }
 
+    private function fillFieldVariables($register)
+    {
+        foreach ($register as $key => $value)
+            $this->{$key} = $value;
+    }
+
+    public function find($field, $value)
+    {
+        if (!$this->count())
+            throw new \NoRegistersORMException('There\'s no registers available');
+
+        if (!$this->fieldExists($field))
+            return false;
+
+        for ($i = 0; $i < count($this->resultSet); $i++) {
+            if ($this->resultSet[$i]->$field === $value)
+                return $this->resultSet[$i];
+        }
+
+        return false;
+    }
+
     public function fieldExists($field)
     {
+        if (!$this->count())
+            throw new \NoRegistersORMException('There\'s no registers available');
+
         for ($i = 0; $i < count($this->resultSet); $i++) {
-            if (array_key_exists($field, $this->resultSet[$i]))
+            if ($this->resultSet[$i]->$field !== null)
                 return true;
         }
 
         return false;
     }
 
-    public function find($field, $value)
+    public function loop()
     {
-        if (!array_key_exists($field, $this->resultSet[0]))
-            return false;
+        if (!$this->firstCall) {
+            $value = next($this->resultSet);
+            if (!$value) {
+                $this->firstCall = true;
+                return false;
+            }
 
-        for ($i = 0; $i < count($this->resultSet); $i++) {
-            if ($this->resultSet[$i][$field] == $value)
-                return $this->resultSet[$i];
+            $this->fillFieldVariables($value);
         }
 
-        return false;
+        $this->firstCall = false;
+
+        return $this;
+
     }
-    
+
     public function findValue($value)
     {
+        if (!$this->count())
+            throw new \NoRegistersORMException('There\'s no registers available');
+
         if ($this->count()) {
             for ($i = 0; $i < count($this->resultSet); $i++) {
-                if (array_search($value, $this->resultSet[$i], true))
-                    return $this->resultSet[$i];
+                foreach (get_object_vars($this->resultSet[$i]) as $property)
+                    if ($property === $value)
+                        return $this->resultSet[$i];
             }
         }
 
@@ -67,23 +102,10 @@ class ResultSet implements ResultSetInterface
 
     public function first()
     {
-        if($this->firstCall)
-            $this->firstCall = false;
-
-        reset($this->resultSet);
+        $value = reset($this->resultSet);
+        $this->fillFieldVariables($value);
 
         return $this;
-    }
-
-    public function get($field)
-    {
-        if($this->firstCall)
-            throw new NoCursorInitializedORMException('You must call first(), last() or next() method before getting some info');
-
-        if(!array_key_exists($field, $this->resultSet[0]))
-            throw new InvalidORMArgument('Field ' . $field . ' does not exist in result');
-
-        return $this->resultSet[key($this->resultSet)][$field];
     }
 
     public function getAll()
@@ -91,110 +113,70 @@ class ResultSet implements ResultSetInterface
         return current($this->resultSet);
     }
 
-    /*public function getFields(...$fieldName)
-    {
-        $colRegisters = array();
-
-        foreach ($fieldName as $col) {
-            if (!array_key_exists($col, $this->resultSet[0]))
-                throw new \OutOfRangeException('The column ' . $col . ' does not exists');
-        }
-
-        if (count($fieldName) > 1) {
-            for ($i = 0; $i < count($fieldName); $i++) {
-                for ($j = 0; $j < count($this->resultSet); $j++) {
-                    $colRegisters[$fieldName[$i]][] = $this->resultSet[$j][$fieldName[$i]];
-                }
-            }
-        } else {
-            for ($i = 0; $i < count($this->resultSet); $i++) {
-                $colRegisters[] = $this->resultSet[$i][$fieldName[0]];
-            }
-        }
-
-        return $colRegisters;
-    }*/
-
     public function goToRegister($register)
     {
         if ($register < 0 || $register >= count($this->resultSet))
             throw new \OutOfRangeException('Index does not exists in the result');
 
-        reset($this->resultSet);
+        $this->first();
 
         while (key($this->resultSet) != $register)
-            next($this->resultSet);
+            $this->next();
 
         return $this;
     }
 
     public function isFirst()
     {
-        if($this->firstCall)
-            throw new NoCursorInitializedORMException('You must call first(), last() or next() method before');
-
-        if (!prev($this->resultSet))
+        if (!$this->prev()) {
+            $this->first();
             return true;
+        }
 
-        next($this->resultSet);
+        $this->next();
 
         return false;
     }
 
-    public function isLast()
+    public function prev()
     {
-        if($this->firstCall)
-            throw new NoCursorInitializedORMException('You must call first(), last() or next() method before');
+        $value = prev($this->resultSet);
+        if (!$value)
+            return false;
 
-        if (!next($this->resultSet))
-            return true;
-
-        prev($this->resultSet);
-
-        return false;
-    }
-
-    public function last()
-    {
-        if($this->firstCall)
-            $this->firstCall = false;
-
-        end($this->resultSet);
+        $this->fillFieldVariables($value);
 
         return $this;
     }
 
     public function next()
     {
-        if($this->firstCall) {
-            $this->firstCall = false;
-            return $this;
-        }
-
-        if (!next($this->resultSet))
+        $value = next($this->resultSet);
+        if (!$value)
             return false;
+
+        $this->fillFieldVariables($value);
 
         return $this;
     }
 
-    public function prev()
+    public function isLast()
     {
-        if($this->firstCall)
-            throw new NoCursorInitializedORMException('You must call first(), last() or next() method before');
-
-        if (!prev($this->resultSet))
-            return false;
-
-        return $this;
-    }
-
-    public function valueExists($value)
-    {
-        for ($i = 0; $i < count($this->resultSet); $i++) {
-            if (array_search($value, $this->resultSet[$i], true))
-                return true;
+        if (!$this->next()) {
+            $this->last();
+            return true;
         }
+
+        $this->prev();
 
         return false;
+    }
+
+    public function last()
+    {
+        $value = end($this->resultSet);
+        $this->fillFieldVariables($value);
+
+        return $this;
     }
 }
