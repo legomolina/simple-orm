@@ -68,6 +68,9 @@ class ResultSet implements ResultSetInterface
 
     public function loop()
     {
+        if(!$this->count())
+            return false;
+        
         if (!$this->firstCall) {
             $value = next($this->resultSet);
             if (!$value) {
