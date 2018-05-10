@@ -21,6 +21,9 @@ class SqlFunctions implements SqlFunctionsInterface
         'vars' => array()
     );
 
+    const WHERE_AND = 'AND';
+    const WHERE_OR  = 'OR';
+
     const ORDER_ASC = 'ASC';
     const ORDER_DESC = 'DESC';
 
@@ -129,7 +132,9 @@ class SqlFunctions implements SqlFunctionsInterface
         return $this;
     }
 
-    public function where($field, $operator = '=', $value)
+
+
+    public function where()
     {
         if($this->statementType == self::STMT_NULL)
             throw new Exc\InvalidORMMethod('Can not join WHERE clause if you are not making another query');
@@ -137,26 +142,92 @@ class SqlFunctions implements SqlFunctionsInterface
         if($this->statementType == self::STMT_INSERT)
             throw new Exc\InvalidORMMethod('WHERE clause can not be applied with INSERT');
 
-        $validOperators = ['=', '<', '>', '<=', '>='];
+        $this->bindParams['vars'] = [];
+        $this->bindParams['types'] = '';
 
-        if(!in_array($operator, $validOperators))
-            throw new Exc\InvalidORMArgument('Operator must be one of SQL allowed');
+        $this->statement .= " WHERE ";
+        return $this;
+    }
 
-        if(gettype($value) == 'string') {
-            $value = "$value";
-            $this->bindParams['types'] .= 's';
-        } elseif (gettype($value) == 'double') {
-            $this->bindParams['types'] .= 'd';
-        } elseif (gettype($value) == 'integer') {
-            $this->bindParams['types'] .= 'i';
-        } else {
-            throw new Exc\InvalidORMArgument('Value must be an integer, double or string');
+    public function and()
+    {
+        $this->statement .= " ".self::WHERE_AND." ";
+        return $this;
+    }
+
+    public function or()
+    {
+        $this->statement .= " ".self::WHERE_OR." ";
+        return $this;
+    }
+
+    protected function whereFilter($filterType, $fields)
+    {
+        if($this->statementType == self::STMT_NULL)
+            throw new Exc\InvalidORMMethod('Can not join WHERE clause if you are not making another query');
+
+        if($this->statementType == self::STMT_INSERT)
+            throw new Exc\InvalidORMMethod('WHERE clause can not be applied with INSERT');
+
+        $validOperators = ['=', '<', '>', '<=', '>=', '!=', 'LIKE'];
+
+        if(!count($fields))
+            throw new Exc\InvalidORMMethod('There must be conditions for WHERE');
+
+        $conditions = [];
+
+        foreach ($fields as $condRow) {
+            if(count($condRow) !== 3)
+                throw new Exc\InvalidORMMethod('Each condition must have three parts - operand1, operator, operand2' . print_r($fields,1));
+
+            $field = $condRow[0];
+            $operator = $condRow[1];
+            $value = $condRow[2];
+
+            if(!in_array($operator, $validOperators))
+                throw new Exc\InvalidORMArgument('Operator must be one of SQL allowed. ' . $operator . ' was given');
+
+            if(gettype($value) == 'string') {
+                $value = "$value";
+                $this->bindParams['types'] .= 's';
+            } elseif (gettype($value) == 'double') {
+                $this->bindParams['types'] .= 'd';
+            } elseif (gettype($value) == 'integer') {
+                $this->bindParams['types'] .= 'i';
+            } else {
+                throw new Exc\InvalidORMArgument('Value must be an integer, double or string');
+            }
+
+            $this->bindParams['vars'][] = &$value;
+
+            $conditions[] = "$field $operator ?";
         }
 
-        $this->bindParams['vars'][] = &$value;
+        $this->statement .= '( ' . implode($filterType, $conditions) . ' )';
 
-        $this->statement .= " WHERE $field $operator ?";
         return $this;
+    }
+
+    public function andFilter($field, $operator = '=', $value)
+    {
+        if (!is_array($field)) {
+            $fields = [[$field, $operator, $value]];
+        } else {
+            $fields = $field;
+        }
+
+        return $this->whereFilter(self::WHERE_AND, $fields);
+    }
+
+    public function orFilter($field, $operator = '=', $value)
+    {
+        if (!is_array($field)) {
+            $fields = [[$field, $operator, $value]];
+        } else {
+            $fields = $field;
+        }
+
+        return $this->whereFilter(self::WHERE_OR, $fields);
     }
 
     public function order($field, $order = 'ASC')
