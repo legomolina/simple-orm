@@ -57,6 +57,12 @@ interface SqlFunctionsInterface
     function or();
 
     /**
+     * Adds NOT string to a query.
+     * @return SqlFunctions
+     */
+    function not();
+
+    /**
      * Adds parenthesized AND clause to a query.
      * @param string $field The field you are asking for
      * @param string $operator The operator used to compare ['=', '<', '>', '<=', '>=', '!=', 'LIKE']

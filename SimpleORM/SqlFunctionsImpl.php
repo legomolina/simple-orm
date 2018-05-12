@@ -155,6 +155,12 @@ class SqlFunctions implements SqlFunctionsInterface
         return $this;
     }
 
+    public function not()
+    {
+        $this->statement .= " NOT ";
+        return $this;
+    }
+
     public function or()
     {
         $this->statement .= " ".self::WHERE_OR." ";
