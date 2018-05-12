@@ -73,7 +73,7 @@ interface SqlFunctionsInterface
      * @throws InvalidORMArgument If $operator is not allowed
      * @throws InvalidORMArgument If $values is not a string, integer or double
      */
-    function andFilter($field, $operator = '=', $value = NULL);
+    function andFilter($field, $operator = '=', $value = null);
 
     /**
      * Adds parenthesized OR clause to a query.
@@ -86,7 +86,7 @@ interface SqlFunctionsInterface
      * @throws InvalidORMArgument If $operator is not allowed
      * @throws InvalidORMArgument If $values is not a string, integer or double
      */
-    function orFilter($field, $operator = '=', $value = NULL);
+    function orFilter($field, $operator = '=', $value = null);
 
     /**
      * Adds IS NULL condition to a query.
