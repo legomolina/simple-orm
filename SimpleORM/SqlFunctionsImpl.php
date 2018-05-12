@@ -208,8 +208,11 @@ class SqlFunctions implements SqlFunctionsInterface
         return $this;
     }
 
-    public function andFilter($field, $operator = '=', $value)
+    public function andFilter($field, $operator = '=', $value = NULL)
     {
+        if (is_null($value))
+            throw new Exc\InvalidORMArgument('Value must be provided');
+
         if (!is_array($field)) {
             $fields = [[$field, $operator, $value]];
         } else {
@@ -219,8 +222,11 @@ class SqlFunctions implements SqlFunctionsInterface
         return $this->whereFilter(self::WHERE_AND, $fields);
     }
 
-    public function orFilter($field, $operator = '=', $value)
+    public function orFilter($field, $operator = '=', $value = NULL)
     {
+        if (is_null($value))
+            throw new Exc\InvalidORMArgument('Value must be provided');
+
         if (!is_array($field)) {
             $fields = [[$field, $operator, $value]];
         } else {
