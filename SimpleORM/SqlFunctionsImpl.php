@@ -214,9 +214,9 @@ class SqlFunctions implements SqlFunctionsInterface
         return $this;
     }
 
-    public function andFilter($field, $operator = '=', $value = NULL)
+    public function andFilter($field, $operator = '=', $value = null)
     {
-        if (is_null($value))
+        if (!is_array($field) && is_null($value))
             throw new Exc\InvalidORMArgument('Value must be provided');
 
         if (!is_array($field)) {
@@ -237,14 +237,14 @@ class SqlFunctions implements SqlFunctionsInterface
         if (!count($output))
             throw new Exc\InvalidORMArgument('Invalid field name');
 
-        $this->statement .= " $field IS NULL";
+        $this->statement .= "$field IS NULL";
 
         return $this;
     }
 
-    public function orFilter($field, $operator = '=', $value = NULL)
+    public function orFilter($field, $operator = '=', $value = null)
     {
-        if (is_null($value))
+        if (!is_array($field) && is_null($value))
             throw new Exc\InvalidORMArgument('Value must be provided');
 
         if (!is_array($field)) {
