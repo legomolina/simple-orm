@@ -228,6 +228,20 @@ class SqlFunctions implements SqlFunctionsInterface
         return $this->whereFilter(self::WHERE_AND, $fields);
     }
 
+    public function isNull($field = NULL)
+    {
+        if (!is_string($field))
+            throw new Exc\InvalidORMArgument('Field must be string');
+
+        preg_match("/^([a-zA-Z][0-9a-zA-Z_]+)$/", $field, $output);
+        if (!count($output))
+            throw new Exc\InvalidORMArgument('Invalid field name');
+
+        $this->statement .= " $field IS NULL";
+
+        return $this;
+    }
+
     public function orFilter($field, $operator = '=', $value = NULL)
     {
         if (is_null($value))

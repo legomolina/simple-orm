@@ -89,6 +89,13 @@ interface SqlFunctionsInterface
     function orFilter($field, $operator = '=', $value = NULL);
 
     /**
+     * Adds IS NULL condition to a query.
+     * @param string $field The field you are asking for
+     * @return SqlFunctions
+     */
+    function isNull($field);
+
+    /**
      * Adds WHERE string to a query.
      * @return SqlFunctions
      */
