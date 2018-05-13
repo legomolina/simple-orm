@@ -85,9 +85,29 @@ If you want to select all data from your table.
 $result = MyModel::query()->select('*')->execute();
 ```
 
-If you want to add conditions.
+If you want to add conditions. This creates a simple where (WHERE field operator value)
 ```php
-$result = MyModel::all()->where('field', '=', 'value')->execute();
+$result = MyModel::all()->where()->andFilter("field", "operator", "value")->execute();
+```
+If you want some conditions you can join them with AND (WHERE field operator value AND field_2 operator_2 value_2).
+```php
+$result = MyModel::all()->where()->andFilter([["field", "operator", "value"], ["field_2", "operator_2", "value_2"]])->execute();
+```
+Join them with or (WHERE field operator value AND field_2 operator_2 value_2)
+```php
+$result = MyModel::all()->where()->orFilter([["field", "operator", "value"], ["field_2", "operator_2", "value_2"]])->execute();
+```
+If you want to combine both (WHERE (field operator value AND field_2 operator_2 value_2) OR (field_3 operator_3 value_3))
+```php
+$result = MyModel::all()->where()->andFilter([["field", "operator", "value"], ["field_2", "operator_2", "value_2"]])->or()->orFilter("field_3", "operator_3", "value_3")->execute();
+```
+Also you can check for NULL values (WHERE field IS NULL)
+```php
+$result = MyModel::all()->where()->isNull("field")->execute();
+```
+Or you can negate (WHERE (field operator value) OR NOT (field_2 operator_2 value_2))
+```php
+$result = MyModel::all()->where()->andFilter("field", "operator", "value")->or()->not()->andFilter("field_2", "operator_2", "value_2")->execute();
 ```
 
 If you don't want to select all fields.
