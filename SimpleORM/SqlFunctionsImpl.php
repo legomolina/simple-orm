@@ -204,12 +204,12 @@ class SqlFunctions implements SqlFunctionsInterface
                 throw new Exc\InvalidORMArgument('Value must be an integer, double or string');
             }
 
-            $this->bindParams['vars'][] = &$value;
+            $this->bindParams['vars'][] = $value;
 
-            $conditions[] = "$field $operator ?";
+            $conditions[] = " $field $operator ? ";
         }
 
-        $this->statement .= '( ' . implode($filterType, $conditions) . ' )';
+        $this->statement .= '(' . implode($filterType, $conditions) . ')';
 
         return $this;
     }
