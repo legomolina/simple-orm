@@ -45,9 +45,27 @@ interface SqlFunctionsInterface
     function delete();
 
     /**
-     * Adds WHERE clause to a query.
+     * Adds AND string to a query.
+     * @return SqlFunctions
+     */
+    function and();
+
+    /**
+     * Adds OR string to a query.
+     * @return SqlFunctions
+     */
+    function or();
+
+    /**
+     * Adds NOT string to a query.
+     * @return SqlFunctions
+     */
+    function not();
+
+    /**
+     * Adds parenthesized AND clause to a query.
      * @param string $field The field you are asking for
-     * @param string $operator The operator used to compare ['=', '<', '>', '<=', '>=']
+     * @param string $operator The operator used to compare ['=', '<', '>', '<=', '>=', '!=', 'LIKE']
      * @param mixed $value The value you want to compare
      * @return SqlFunctions
      * @throws InvalidORMMethod If try to join WHERE with any query
@@ -55,7 +73,33 @@ interface SqlFunctionsInterface
      * @throws InvalidORMArgument If $operator is not allowed
      * @throws InvalidORMArgument If $values is not a string, integer or double
      */
-    function where($field, $operator = '=', $value);
+    function andFilter($field, $operator = '=', $value = null);
+
+    /**
+     * Adds parenthesized OR clause to a query.
+     * @param string $field The field you are asking for
+     * @param string $operator The operator used to compare ['=', '<', '>', '<=', '>=', '!=', 'LIKE']
+     * @param mixed $value The value you want to compare
+     * @return SqlFunctions
+     * @throws InvalidORMMethod If try to join WHERE with any query
+     * @throws InvalidORMMethod If try to join WHERE with INSERT query
+     * @throws InvalidORMArgument If $operator is not allowed
+     * @throws InvalidORMArgument If $values is not a string, integer or double
+     */
+    function orFilter($field, $operator = '=', $value = null);
+
+    /**
+     * Adds IS NULL condition to a query.
+     * @param string $field The field you are asking for
+     * @return SqlFunctions
+     */
+    function isNull($field);
+
+    /**
+     * Adds WHERE string to a query.
+     * @return SqlFunctions
+     */
+    function where();
 
     /**
      * Adds the ORDER clause to a query.
